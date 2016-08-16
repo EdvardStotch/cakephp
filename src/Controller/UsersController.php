@@ -1,30 +1,50 @@
-<?php 
+<?php
+/**
+ * Copyright 2010 - 2015, Cake Development Corporation (http://cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2015, Cake Development Corporation (http://cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
 
-namespace App\Controller;
+namespace CakeDC\Users\Controller;
 
-use App\Controller\AppController;
+use CakeDC\Users\Controller\AppController;
+use CakeDC\Users\Controller\Component\UsersAuthComponent;
+use CakeDC\Users\Controller\Traits\LoginTrait;
+use CakeDC\Users\Controller\Traits\ProfileTrait;
+use CakeDC\Users\Controller\Traits\ReCaptchaTrait;
+use CakeDC\Users\Controller\Traits\RegisterTrait;
+use CakeDC\Users\Controller\Traits\SimpleCrudTrait;
+use CakeDC\Users\Controller\Traits\SocialTrait;
+use CakeDC\Users\Model\Table\UsersTable;
+use Cake\Core\Configure;
+use Cake\ORM\Table;
 
-class UsersController extends AppController {
-    
-    public function index(){
-        
+/**
+ * Users Controller
+ *
+ * @property UsersTable $Users
+ */
+class UsersController extends AppController
+{
+    use LoginTrait;
+    use ProfileTrait;
+    use ReCaptchaTrait;
+    use RegisterTrait;
+    use SimpleCrudTrait;
+    use SocialTrait;
+
+    /**
+     * Override loadModel to load specific users table
+     * @param string $modelClass model class
+     * @param string $type type
+     * @return Table
+     */
+    public function loadModel($modelClass = null, $type = 'Table')
+    {
+        return parent::loadModel(Configure::read('Users.table'));
     }
-    
-    public function register() {
-        
-        $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user,$this->request->data);
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['controller' => 'Articles',
-                'action' => 'index']);;
-            }
-            $this->Flash->error(__('Unable to add the user.'));
-        }
-        $this->set('user', $user);
-    }
-    
 }
-
-?>

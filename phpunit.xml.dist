@@ -13,11 +13,15 @@
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="App Test Suite">
+        <testsuite name="Users Test Suite">
             <directory>./tests/TestCase</directory>
         </testsuite>
-        <!-- Add plugin test suites here. -->
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
 
     <!-- Setup a listener for fixtures -->
     <listeners>
@@ -29,12 +33,4 @@
             </arguments>
         </listener>
     </listeners>
-
-    <!-- Ignore vendor tests in code coverage reports -->
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./src/</directory>
-            <directory suffix=".php">./plugins/*/src/</directory>
-        </whitelist>
-    </filter>
 </phpunit>
